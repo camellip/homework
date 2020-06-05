@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+div, h1, ul, li, label, input, select, img, button, span, p, table, thead, tbody, tr, th, td, colgroup, col{
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+}
+
+ul{list-style: none;}
+h1{
+    font-size: 30px;
+    margin-bottom: 15px;
+    
+}
+.wrap{
+    width: 800px;
+    margin:0 auto;
+    border: 1px solid #000;
+    padding: 20px;
+}
+.productInfo{
+    margin-bottom: 30px;
+}
+
+.productInfo img{
+    width: 300px;
+    height: auto;
+    display:block;
+    margin: 0 auto;
+}
+
+.productInfo .title{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.productInfo p.exr{
+    color: blue;
+    font-weight: bold;
+}
+
+.productOrder{}
+.productOrder{} h1{}
+.productOrder .label{
+    text-align: left;
+    font-weight: normal;
+    text-indent: 5px;
+}
+.productOrder input{
+    width: 300px;
+    height: 35px;
+    border : 1px solid #000;
+    border-radius: 5px;
+}
+.productOrder input:focus{
+    border : 2px solid blue;
+}
+
+.productOrder select{
+    width: 300px;
+    height: 35px;
+    border : 1px solid #000;
+    border-radius: 5px;
+}
+.productOrder select:focus{
+    border : 2px solid blue;
+}
+.productOrder button{
+    width: 300px;
+    height: 45px;
+    border : 1px solid #000;
+    border-radius: 5px;
+    background-color: #fff;
+    display: block;
+    margin : 50px auto 0px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.productOrder .orderBtn:hover{
+    background-color: #000;
+    color: #fff;
+}
+
+div.orders{
+    width: 90%;
+    margin : 50px auto 30px;
+}
+table.table{
+    width: 100%;
+}
+
+table.table thead{
+}
+
+table.table thead tr th{
+    background-color: black;
+    color: #fff;
+    font-size: 20px;
+    padding: 10px 0;
+}
+
+table.table tbody tr{
+}
+
+table.table tbody tr td{
+    text-align: center;
+    padding:10px 0;
+    color : blue
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css.css') }}" type="text/css" rel="stylesheet" />
+    <title>원페이지 쇼핑몰 만들기</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#ordersBox').html('');
+            listing();
+        });
+
+        //환율정보
+        $.ajax({
+            type: "GET",
+            url: "https://api.manana.kr/exchange/rate.json",
+            data: {},
+            success: function (response) {
+                let usd = response[1]
+                //console.log(usd);
+                let rate = usd['rate'];
+                //console.log(rate);
+                $('div.productInfo span.rate').text(rate);
+            }
+
+        })
+
+        function orderBtn() {
+            let name = $('#orderName').val();
+            let qty = $('#orderNumber').val();
+            let address = $('#orderAddress').val();
+            let tel = $('#orderTel').val();
+
+            //alert
+            if (name == "") {
+                alert('이름을 입력해주세요.')
+                $('#orderName').focus();
+                return;
+            } else if (qty == "") {
+                alert('수량을 선택해주세요.')
+                $('#orderNumber').focus();
+                return;
+            } else if (address == "") {
+                alert('주소를 입력해주세요.')
+                $('#orderAddress').focus();
+                return;
+            } else if (tel == "") {
+                alert('전화번호를 입력해주세요.')
+                $('#orderTel').focus();
+                return;
+            }
+
+            // 3. POST /orderform 에 저장을 요청합니다.
+            $.ajax({
+                type: "POST",
+                url: "/orderform",
+                data: {
+                    name_give: name,
+                    qty_give: qty,
+                    address_give: address,
+                    tel_give: tel
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+
+        function listing() {
+            // 1. 리뷰 목록을 서버에 요청하기
+            $.ajax({
+                type: "GET",
+                url: "/orderform",
+                data: {},
+                success: function (response) {
+                    // 2. 요청 성공 여부 확인하기
+                    if (response['result'] == 'success') {
+                        let orderList = response['orderList'];
+                        // 3. 요청 성공했을 때 리뷰를 올바르게 화면에 나타내기
+                        for (let i = 0; i < orderList.length; i++) {
+                            make_card(orderList[i]['name'], orderList[i]['qty'], orderList[i]['address'], orderList[i]['tel']);
+                        }
+                    } else {
+                        alert('주문리스트를 받아오지 못했습니다');
+                    }
+                }
+            })
+        }
+
+        function make_card(name, qty, address, tel) {
+            let temp_html = `<tr>
+                        <td>${name}</td>
+                        <td>${qty}</td>
+                        <td>${address}</td>
+                        <td>${tel}</td>
+                    </tr>`;
+            $('#ordersBox').append(temp_html);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="productInfo">
+            <img src="{{ url_for('static', filename='table.webp') }}" alt="독스타 테이블" />
+            <h1 class="title">DOCKSTA 독스타 테이블</h1>
+            <span>가격: ￦ 249,000 / 개</span>
+            <p class="exr"> 달러=원 환율: <span class="rate">-</span></p>
+            <p>편안한 느낌을 주는 원형테이블입니다.
+                <br>
+                테스트를 거친 제품입니다. 테이블의 겉면은 액체, 음식물, 기름 자국이 남지 않고 열기, 흠집, 충격에도 강하며 테이블 구조는 견고하고 튼튼해서 오랫동안 일상적으로 사용할 수 있습니다.
+                <br>
+                4인용.
+            </p>
+        </div>
+
+        <div class="productOrder">
+            <h1>주문하기</h1>
+            <table>
+                <tr>
+                    <th class="label">주문자 성함 :</th>
+                    <td><input type="text" id="orderName"></td>
+                </tr>
+                <tr>
+                    <th class="label">수량 :</th>
+                    <td><select id="orderNumber">
+                            <option selected value>-- 수량을 선택하세요 --</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select></td>
+                </tr>
+                <tr>
+                    <th class="label">주소 :</th>
+                    <td><input type="text" id="orderAddress"></td>
+                </tr>
+                <tr>
+                    <th class="label">전화번호 :</th>
+                    <td><input type="tel" id="orderTel"></td>
+                </tr>
+            </table>
+            <button class="orderBtn" onclick="orderBtn()">주문하기</button>
+        </div>
+        <div class="orders">
+            <table class="table">
+                <colgroup>
+                    <col width="20%"/>
+                    <col width="20%"/>
+                    <col width="*"/>
+                    <col width="20%"/>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>수량</th>
+                        <th>주소</th>
+                        <th>전화번호</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersBox">
+                    <tr>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>Otto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
